@@ -69,3 +69,40 @@ def chat_json(
     return {"_parse_error" : True, "raw": raw}
 
 
+def orchestrator_chat(
+        prompt: str,
+        system: str = "",
+        max_tokens: int = 1024,
+) -> str:
+    
+    return chat(
+        prompt = prompt,
+        system = system, 
+        model = ORCHESTRATOR_MODEL,
+        max_tokens = max_tokens,
+    )
+
+def orchestrator_json(
+        prompt: str, 
+        system: str = ""
+        max_tokens: int = 1024,
+) -> dict:
+
+    raw = orchestrator_chat(prompt=prompt, system= system, max_tokens= max_toekens)
+
+    cleaned = re.sub(r "```json\s*|```\s*","", raw).strip()
+
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        pass
+
+    match = re.search(r"(\{.*\}|\[.*\])", cleaned, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(1))
+        except json.JSONDecodeError:
+            pass
+
+    return {"_parse_error": True, "rew": raw}
+
