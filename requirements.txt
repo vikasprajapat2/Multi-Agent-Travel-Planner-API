@@ -4,3 +4,4 @@ fastapi>=0.110.0
 uvicorn>=0.29.0
 streamlit>=1.32.0
 requests>=2.31.0
+amadeus>=2.0.0
