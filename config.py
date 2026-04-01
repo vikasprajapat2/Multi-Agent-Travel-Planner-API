@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-GOOGLE_GEMINI_API_KEY = os.getenv("GOOGLE_GEMINI_API_KEY", "")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
-LLM_MODEL          = os.getenv("LLM_MODEL",          "gemini-2.0-flash")
-ORCHESTRATOR_MODEL = os.getenv("ORCHESTRATOR_MODEL", "gemini-2.5-pro")
+LLM_MODEL          = os.getenv("LLM_MODEL",          "mixtral-8x7b-32768")
+ORCHESTRATOR_MODEL = os.getenv("ORCHESTRATOR_MODEL", "mixtral-8x7b-32768")
 
 APP_HOST =  os.getenv("APP_HOST", "0.0.0.0")
 APP_PORT = int(os.getenv("APP_PORT", "8000"))

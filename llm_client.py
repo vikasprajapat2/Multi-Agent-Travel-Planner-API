@@ -1,16 +1,15 @@
 import os
 import re
 import json 
-from google import genai
-from google.genai import types
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from config import GOOGLE_GEMINI_API_KEY, LLM_MODEL, ORCHESTRATOR_MODEL
+from config import GROQ_API_KEY, LLM_MODEL, ORCHESTRATOR_MODEL
 
-_client = genai.Client(
-    api_key=GOOGLE_GEMINI_API_KEY or os.environ.get('GOOGLE_GEMINI_API_KEY','')
+_client = Groq(
+    api_key=GROQ_API_KEY or os.environ.get('GROQ_API_KEY','')
 )
 
 def chat(
@@ -21,22 +20,23 @@ def chat(
     temperature: float = 0.3, 
 ) -> str:
 
-    full_prompt = f"{system}\n\n{prompt}" if system else prompt
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
 
     try:
-        response = _client.models.generate_content(
-            model = model,
-            contents = full_prompt,
-            config = types.GenerateContentConfig(
-                max_output_tokens = max_tokens,
-                temperature = temperature,
-            ),
+        response = _client.chat.completions.create(
+            model=model,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
         )
 
-        return response.text or ""
+        return response.choices[0].message.content or ""
 
     except Exception as e:
-        raise RuntimeError(f"Gemini api error (model={model}):{e}") from e
+        raise RuntimeError(f"Groq api error (model={model}):{e}") from e
 
 def chat_json(
         prompt: str, 
