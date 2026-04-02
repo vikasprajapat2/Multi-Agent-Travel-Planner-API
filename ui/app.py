@@ -271,7 +271,7 @@ user_input = st.chat_input(
 )
 if user_input:
     ensure_session()
-    with st.spinner("🤖 Planning your trip... (20-40 seconds)"):
+    with st.spinner("🤖 Planning your trip... (20-40 secons)"):
         plan = api_plan(user_input, st.session_state.session_id)
     if plan:
         st.session_state.plan = plan

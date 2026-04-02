@@ -87,6 +87,50 @@ python main.py
 
 Server runs at `http://localhost:8000`
 
+## Quick Start with UI
+
+Run both the backend and frontend in separate terminals:
+
+**Terminal 1 — FastAPI backend (keep this running)**
+```bash
+cd D:\travel-ai
+.venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000
+```
+
+**Terminal 2 — Streamlit UI**
+```bash
+cd D:\travel-ai
+.venv\Scripts\python.exe -m streamlit run ui\app.py
+```
+
+Then open **http://localhost:8501** in your browser.
+
+### What You'll See
+
+```
+✈️ AI Travel Planner
+─────────────────────────────────────────
+[Sidebar]                [Main area]
+Destination: Goa         Type your trip here...
+From: Ahmedabad          
+Budget: ₹30,000          💡 Try these examples:
+Days: 5                  • 5-day Goa trip couple ₹30k
+Type: couple             • Kerala family 7 days ₹80k
+Interests: beach,food    • Solo Manali 6 days ₹20k
+
+[Plan My Trip]
+```
+
+After generating a plan — 5 tabs appear:
+
+| Tab | Shows |
+|---|---|
+| ✈️ Flights & Hotel | Recommended flight + hotel with alternatives |
+| 📍 Itinerary | Day-by-day expandable schedule with meals |
+| 💰 Budget | Progress bars per category + money tips |
+| 🌦️ Context | Weather, food, safety, etiquette, packing |
+| 💬 Chat | Full conversation history + plan comparison |
+
 ## API Endpoints
 
 ### Session Management
@@ -213,28 +257,25 @@ print(f"Cost: ₹{plan['plan']['budget']['total_cost']:,}")
 ## Project Structure
 
 ```
-travel-ai/
-├── main.py                    # FastAPI server
-├── config.py                  # Configuration & TravelRequest dataclass
-├── llm_client.py              # Groq LLM integration
-├── requirements.txt           # Dependencies
-├── .env                       # API keys (not in git)
-│
-├── agents/                    # Specialist agents
-│   ├── planner.py            # Orchestrator (coordinates all 5 agents)
-│   ├── fllight_agent.py      # Flight search & selection
-│   ├── hotel_agent.py        # Hotel recommendation
-│   ├── itinerary_agent.py    # Day-by-day activity planning
-│   ├── budget_agent.py       # Cost tracking & alerts
-│   └── contex_agent.py       # Weather, safety, tips
-│
-├── tools/                     # External API wrappers
-│   ├── flight_api.py         # AviationStack flights
-│   ├── hotel_api.py          # Booking.com hotels
-│   └── weather_api.py        # Weather data
-│
-└── memory/                    # Session management
-    └── Session_store.py      # Session persistence & chat history
+D:\travel-ai\
+├── config.py              Part 1 ✅
+├── llm_client.py          Part 1 ✅
+├── main.py                Part 6 ✅
+├── agents/
+│   ├── planner.py         Part 5 ✅
+│   ├── fllight_agent.py   Part 4 ✅
+│   ├── hotel_agent.py     Part 4 ✅
+│   ├── itinerary_agent.py Part 4 ✅
+│   ├── budget_agent.py    Part 4 ✅
+│   └── context_agent.py   Part 4 ✅
+├── tools/
+│   ├── flight_api.py      Part 3 ✅
+│   ├── hotel_api.py       Part 3 ✅
+│   └── weather_api.py     Part 3 ✅
+├── memory/
+│   └── session_store.py   Part 2 ✅
+└── ui/
+    └── app.py             Part 7 ✅
 ```
 
 ## Configuration
