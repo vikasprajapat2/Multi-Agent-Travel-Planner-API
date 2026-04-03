@@ -35,6 +35,73 @@ An AI-powered travel planning system that uses multiple specialist agents to cre
 - Compare multiple versions
 - Export as formatted text
 
+## Screenshots
+
+### 1. Trip Planning Interface
+The main dashboard where users input their travel preferences:
+- Destination selection
+- Origin city
+- Budget allocation
+- Trip duration
+- Travel type (solo, couple, family, group)
+- Interest selection
+
+![Trip Planning](./screenshots/01-trip-planning.png)
+
+### 2. Context & Safety Information
+Comprehensive travel context with weather, safety tips, and local insights:
+- Current weather conditions
+- Safety recommendations
+- Must-try local food with pricing
+- Local events and festivals
+- Packing essentials
+- Insider travel tips
+
+![Context Info](./screenshots/02-context-info.png)
+
+### 3. Generated Trip Overview
+Complete trip summary showing all details:
+- Destination and dates
+- Duration and passenger count
+- Travel type
+- Total cost overview
+- Tabs for Flights, Itinerary, Budget, Context, and Chat
+
+![Trip Overview](./screenshots/03-trip-overview.png)
+
+### 4. Budget Breakdown
+Detailed budget analysis with cost allocation:
+- Total cost vs. allocated budget
+- Per-day spending analysis
+- Per-person cost calculation
+- Cost breakdown by category (flights, hotels, activities)
+- Visual representation of expense distribution
+- Budget status (within/over budget)
+
+![Budget Breakdown](./screenshots/04-budget-breakdown.png)
+
+### 5. Day-by-Day Itinerary
+Detailed daily activities and schedule:
+- Highlights for the trip
+- Travel tips and logistics
+- Daily breakdown with timings
+- Activity descriptions and hints
+- Meal recommendations
+- Cost per activity
+
+![Itinerary](./screenshots/05-itinerary.png)
+
+### 6. Flight & Hotel Recommendations
+Smart recommendations for transportation and accommodation:
+- Recommended flights with details
+- Flight duration and amenities
+- Recommended hotels with ratings
+- Room prices and total cost
+- Amenities and facilities
+- Value indicators ("best price available", "best rated option within budget")
+
+![Flights & Hotels](./screenshots/06-flights-hotels.png)
+
 ## Prerequisites
 
 - Python 3.10+
