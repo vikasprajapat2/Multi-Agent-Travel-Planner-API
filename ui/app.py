@@ -93,6 +93,8 @@ def api_plan(query: str, session_id: str) -> dict | None:
                  "`.venv\\Scripts\\python.exe -m uvicorn main:app --reload --port 8000`")
     except requests.exceptions.Timeout:
         st.error("⏱️ Request timed out. The agents are taking too long — try again.")
+    except Exception as e:
+        st.error(f"❌ Unexpected error: {str(e)}")
     return None
 
 
@@ -145,7 +147,8 @@ with st.sidebar:
     st.markdown("---")
 
     # Quick fill form 
-    st.markdown("### Plan a Trip")
+    st.markdown("### 🚀 Plan a Trip (No typing needed!)")
+    st.caption("Fill below and click 'Plan My Trip' — no manual input required")
     destination  = st.text_input("Destination",    "Goa")
     origin       = st.text_input("From city",      "Ahmedabad")
     budget       = st.number_input("Budget (₹)",   min_value=5000,
@@ -240,7 +243,9 @@ if hasattr(st.session_state, "_pending_query"):
             "label": plan.get("trip_title","Plan"),
             "cost":  plan.get("budget",{}).get("total_cost",0),
         })
-    st.rerun()
+        st.rerun()
+    else:
+        st.error("❌ Failed to generate plan. Please check the error above and try again.")
 
 if hasattr(st.session_state, "_pending_replan"):
     change = st.session_state._pending_replan
@@ -259,7 +264,9 @@ if hasattr(st.session_state, "_pending_replan"):
             "label": plan.get("trip_title","Updated Plan"),
             "cost":  plan.get("budget",{}).get("total_cost",0),
         })
-    st.rerun()
+        st.rerun()
+    else:
+        st.error("❌ Failed to update plan. Please check the error above and try again.")
 
 
 # Main content area
@@ -286,7 +293,9 @@ if user_input:
             "label": plan.get("trip_title","Plan"),
             "cost":  plan.get("budget",{}).get("total_cost",0),
         })
-    st.rerun()
+        st.rerun()
+    else:
+        st.error("❌ Failed to generate plan. Please check the error above and try again.")
 
 
 
@@ -295,8 +304,12 @@ if user_input:
 
 if not st.session_state.plan:
     # ── No plan yet — show examples ───────────────────────────────────────────
-    st.info("👆 Use the sidebar form or type a query above to plan your trip.")
-    st.markdown("### 💡 Try these")
+    col_msg1, col_msg2 = st.columns([2, 1])
+    with col_msg1:
+        st.info("✅ **Quick Start:** Fill the form in the sidebar and click '🗺️ Plan My Trip' to generate your plan automatically!")
+    with col_msg2:
+        st.info("💬 Or type a custom query below if you prefer.")
+    st.markdown("### 💡 Try these examples")
     examples = [
         "5-day Goa trip for couple under ₹30,000",
         "7-day Kerala family trip from Mumbai ₹80,000 with kids",

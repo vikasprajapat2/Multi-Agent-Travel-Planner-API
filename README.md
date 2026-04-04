@@ -176,22 +176,33 @@ Then open **http://localhost:8501** in your browser.
 ✈️ AI Travel Planner
 ─────────────────────────────────────────
 [Sidebar]                [Main area]
-Destination: Goa         Type your trip here...
-From: Ahmedabad          
-Budget: ₹30,000          💡 Try these examples:
-Days: 5                  • 5-day Goa trip couple ₹30k
-Type: couple             • Kerala family 7 days ₹80k
-Interests: beach,food    • Solo Manali 6 days ₹20k
-
-[Plan My Trip]
+Destination: Goa         💬 Chat input
+From: Ahmedabad          (for custom queries)
+Budget: ₹30,000          
+Days: 5                  💡 Example queries:
+Type: couple             • 5-day Goa trip
+Interests: beach,food    • Kerala family 7d
+                         • Solo Manali 6d
+[🗺️ Plan My Trip] ← Click this!
 ```
 
-After generating a plan — 5 tabs appear:
+**Two ways to generate a plan:**
+
+1. **Quick Form (Recommended):**
+   - Fill destination, budget, travel type in sidebar
+   - Click "🗺️ Plan My Trip"
+   - No manual typing needed!
+
+2. **Custom Query:**
+   - Type a query in the chat input
+   - Or click an example below the chat input
+   - "5-day Goa trip for couple under ₹30,000"
 
 | Tab | Shows |
 |---|---|
 | ✈️ Flights & Hotel | Recommended flight + hotel with alternatives |
-| 📍 Itinerary | Day-by-day expandable schedule with meals |
+| � Transport | Train & bus options + recommendations |
+| �📍 Itinerary | Day-by-day expandable schedule with meals |
 | 💰 Budget | Progress bars per category + money tips |
 | 🌦️ Context | Weather, food, safety, etiquette, packing |
 | 💬 Chat | Full conversation history + plan comparison |

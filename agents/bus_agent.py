@@ -54,7 +54,7 @@ class BusAgent:
 
     def run(salf, request: TravelRequest) -> dict:
         date = request.start_date or "2025-06-01"
-        print(f "Searching buses...")
+        print(f"Searching buses...")
         raw_buses = search_buses(
             origin      = request.origin,
             destination = request.destination,
@@ -65,9 +65,9 @@ class BusAgent:
         if not raw_buses:
             return self._empty_result()
         
-        route_deraton = raw_buses[0].get("duration",'unknown') if raw_buses else "unknown"
+        route_duration = raw_buses[0].get("duration",'unknown') if raw_buses else "unknown"
 
-    prompt = f"""Find the best bus for this trip:
+        prompt = f"""Find the best bus for this trip:
  
 Route      : {request.origin} → {request.destination}
 Date       : {date}
@@ -86,8 +86,8 @@ Available buses:
  
 Pick the best bus and type. Consider operator reputation, comfort,
 departure timing, and value for money.
-Return ONLY the JSON structure. No other text."""   
-    
+Return ONLY the JSON structure. No other text."""
+        
         result = chat_json(prompt=prompt, system=SYSTEM_PROMPT, max_tokens=800)
  
         if result.get("_parse_error") or not result.get("recommended"):
@@ -96,8 +96,8 @@ Return ONLY the JSON structure. No other text."""
  
         return result
 
-    def _fallback(self,raw_buses: list, passengers: int) -> dict:
-         sorted_buses = sorted(
+    def _fallback(self, raw_buses: list, passengers: int) -> dict:
+        sorted_buses = sorted(
             raw_buses,
             key=lambda b: (-b.get("rating", 0), b.get("price_inr", 9999999))
         )

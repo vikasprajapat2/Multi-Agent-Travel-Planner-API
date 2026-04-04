@@ -38,7 +38,7 @@ Return ONLY valid JSON:
 
 class TrainAgent:
     name = "TrainAgent0"
-    def  run(self, request, TravelRequest) -> dict:
+    def run(self, request: 'TravelRequest') -> dict:
         if request.travel_type == "honeymoon" or request.is_luxury():
             default_class = "2A"
         elif request.travel_type == "family":
@@ -55,31 +55,24 @@ class TrainAgent:
 
         print(f"Searching {default_class} and {compare_class} class trains...")
 
-        trains_defaults - search_trains(
+        trains_defaults = search_trains(
             origin = request.origin,
             destination =  request.destination,
             date = date,
-            passenges = request.passengers,
-            Travel_class = default_class,
+            passengers = request.passengers,
+            travel_class = default_class,
         )
+
         train_upgrade = search_trains(
             origin = request.origin,
             destination = request.destination,
             date = date,
             passengers = request.passengers,
-            Travel_class = default_class,
+            travel_class = compare_class
         )
 
-        train_upgrade = search_trains(
-            origin = request.origin,
-            destination = request.destination,
-            date = date,
-            passengers = request.passangers,
-            Travel_class = compare_class
-        )
-
-        if not trains_default and not trains_upgrade:
-            return self._empty_reseult()
+        if not trains_defaults and not train_upgrade:
+            return self._empty_result()
 
         prompt = f"""Find the best train for this trip:
 Route      : {request.origin} → {request.destination}
@@ -89,9 +82,9 @@ Travel type: {request.travel_type}
 Budget     : Rs.{request.budget:,.0f} total
 Preferences: {request.pref_str()}
 {default_class} class options:
-{json.dumps(trains_default[:3], indent=2)}
+{json.dumps(trains_defaults[:3], indent=2)}
 {compare_class} class options (upgrade):
-{json.dumps(trains_upgrade[:2], indent=2)}
+{json.dumps(train_upgrade[:2], indent=2)}
 Pick the best train and class. Consider availability, duration, and
 whether the upgrade is worth it for this travel type.
 Return ONLY the JSON structure. No other text."""
@@ -100,7 +93,7 @@ Return ONLY the JSON structure. No other text."""
 
         if result.get("_parse_error") or not result.get('recommended'):
             print(f" [{self.name}] JSON parse issue - using fallback")
-            return self.fallback(trains_defaults, request.passengers, default_class)
+            return self._fallback(trains_defaults, request.passengers, default_class)
         
         return result
     
@@ -120,7 +113,7 @@ Return ONLY the JSON structure. No other text."""
             "best_class": cls,
             "class_note": f"{cls} class recommended for this journey",
             "total_cost": price,
-            "price_person_cost": price // max(passengers, 1),
+            "per_person_cost": price // max(passengers, 1),
             "booking_tip": "Book 60 days in advance on irctc.co.in for bests availability",
             "irctc_search": best.get("train_name", ''),
         }
