@@ -17,6 +17,8 @@ from agents.train_agent import TrainAgent
 from agents.bus_agent import BusAgent
 from agents.budget_agent import BudgetAgent
 from agents.context_agent import ContextAgent
+from agents.journey_agent import JourneyAgent
+
 
 # parse prompt
 PARSE_SYSTEM = """You are a travel request parser for Indian travellers.
@@ -65,6 +67,7 @@ class PlannerAgent:
         self.bus_agent = BusAgent()
         self.budget_agent = BudgetAgent()
         self.context_agent = ContextAgent()
+        self.journey_agent   = JourneyAgent()
 
     # public method 1 - plan()
     def plan(self, user_query: str, session_id: str | None = None) -> dict:
@@ -89,42 +92,47 @@ class PlannerAgent:
         print(f"\n[Planner] Running agents..")
             
         
-        print(f"  [1/5] FlightAgent...")
+        print(f"  [1/8] FlightAgent...")
         flights = self.flight_agent.run(request)
         print(f" → ₹{(flights.get('round_trip_cost') or 0):,} | "
             f"{flights.get('recommended', {}).get('airline', 'N/A')}")
         
-        print(f"  [2/7] TrainAgent...")
+        print(f"  [2/8] TrainAgent...")
         trains = self.train_agent.run(request)
         rec_train = trains.get("recommended") or {}
         print(f"        → {rec_train.get('train_name','N/A')} | "
               f"Rs.{trains.get('total_cost',0):,} | "
               f"Class: {trains.get('best_class','N/A')}")
         
-        print(f"  [3/7] BusAgent...")
+        print(f"  [3/8] BusAgent...")
         buses = self.bus_agent.run(request)
         rec_bus = buses.get("recommended") or {}
         print(f"        → {rec_bus.get('operator','N/A')} | "
               f"Rs.{buses.get('total_cost',0):,} | "
               f"{buses.get('best_type','N/A')}")
 
-        print(f"  [2/5] HotelAgent...")
+        print(f"  [4/8] HotelAgent...")
         hotel = self.hotel_agent.run(request)
         rec_hotel = hotel.get('recommended', {})
         print(f"        → ₹{(hotel.get('per_night_cost') or 0):,}/night | "
                 f"{rec_hotel.get('name', 'N/A')}")
 
-        print(f"  [3/5] ContextAgent...")
+        print(f"  [5/8] ContextAgent...")
         context = self.context_agent.run(request)
         print(f"        → Season: {context.get('season', 'N/A')} | "
                 f"{context.get('condition', 'N/A')}")
 
-        print(f"  [4/5] ItineraryAgent...")
+        print(f"  [6/8] ItineraryAgent...")
         itinerary = self.itinerary_agent.run(request, hotel, flights)
         days_count = len(itinerary.get('days', []))
         print(f"        → {days_count} days generated")
+        
+        print(f"  [7/8] JourneyAgent (every leg + sightseeing)...")
+        journey = self.journey_agent.run(request, flights, hotel, itinerary)
+        legs_count = len(journey.get('legs', []))
+        print(f"        → {legs_count} journey legs planned")
 
-        print(f"  [5/5] BudgetAgent...")
+        print(f"  [8/8] BudgetAgent...")
         budget = self.budget_agent.run(request, flights, hotel)
         print(f"        → Total: ₹{(budget.get('total_cost') or 0):,} | "
                 f"Status: {budget.get('status', 'N/A')}")
@@ -132,7 +140,7 @@ class PlannerAgent:
         # Step 4: Merge all results into final plan
 
         plan = self._merge_plan(
-            request, flights, hotel, itinerary, budget, context, trains, buses
+            request, flights, hotel, itinerary, budget, context, trains, buses, journey
         )
 
         # step 5: Save to session memory
@@ -271,6 +279,7 @@ class PlannerAgent:
         context:   dict,
         trains:    dict = None,
         buses:     dict = None,
+        journey:   dict = None,
     ) -> dict:
         
         # Extract top tips from context for the summary section
@@ -298,6 +307,7 @@ class PlannerAgent:
             "flights":     flights,
             "trains":      trains or {},
             "buses":       buses or {},
+            "journey":   journey or {},
             "hotel":       hotel,
             "itinerary":   itinerary,
             "budget":      budget,
