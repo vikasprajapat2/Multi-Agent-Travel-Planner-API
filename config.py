@@ -59,8 +59,8 @@ if __name__ == "__main__":
     print("=" * 55)
 
     print('\n[1] API key check')
-    if GOOGLE_GEMINI_API_KEY and GOOGLE_GEMINI_API_KEY != "AIzaSyDeZcN78pBKRdxjBrp1TgmSW1qd6_Qbp1w":
-        visible = GOOGLE_GEMINI_API_KEY[:8] + '...' + GOOGLE_GEMINI_API_KEY[-4:]
+    if GROQ_API_KEY and GROQ_API_KEY != "gsk_your_groq_api_key_here":
+        visible = GROQ_API_KEY[:8] + '...' + GROQ_API_KEY[-4:]
         print(f"   Key loaded: {visible}")
 
     else:

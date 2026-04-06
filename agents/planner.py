@@ -296,8 +296,8 @@ class PlannerAgent:
  
 
             "flights":     flights,
-            "trains":  train or {},
-            "buses": buses or {},
+            "trains":      trains or {},
+            "buses":       buses or {},
             "hotel":       hotel,
             "itinerary":   itinerary,
             "budget":      budget,

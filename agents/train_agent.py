@@ -16,6 +16,9 @@ TRAIN CLASS GUIDE:
     3A  (AC 3-tier)  — most popular, good comfort, families, medium journeys
     2A  (AC 2-tier)  — more space and privacy, couples, long journeys
     1A  (First AC)   — premium cabins, luxury travellers, honeymoon
+    CC  (AC Chair Car) - daytime short journeys, comfortable seating
+    EC  (Executive Chair) - premium daytime journeys, spacious seating
+    2S  (Second Seating) - non-AC, very cheap daytime travel
     
 Rulers:
 - Never recommed SL for families with children or honeymoon
