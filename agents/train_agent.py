@@ -30,7 +30,7 @@ Rulers:
 Return ONLY valid JSON:
 {
   "recommended": {train dict},
-  "alternatives": [{train dict}],
+  "alternatives": [{train dict}, ...include ALL other trains provided],
   "best_class": "3A",
   "class_note": "Why this class suits this trip",
   "total_cost": 0,
@@ -85,11 +85,11 @@ Travel type: {request.travel_type}
 Budget     : Rs.{request.budget:,.0f} total
 Preferences: {request.pref_str()}
 {default_class} class options:
-{json.dumps(trains_defaults[:3], indent=2)}
+{json.dumps(trains_defaults, indent=2)}
 {compare_class} class options (upgrade):
-{json.dumps(train_upgrade[:2], indent=2)}
+{json.dumps(train_upgrade, indent=2)}
 Pick the best train and class. Consider availability, duration, and
-whether the upgrade is worth it for this travel type.
+whether the upgrade is worth it for this travel type. Make sure to put ALL other remaining trains in the "alternatives" list.
 Return ONLY the JSON structure. No other text."""
         
         result = chat_json(prompt= prompt, system= SYSTEM_PROMPT,max_tokens=800)
@@ -110,9 +110,10 @@ Return ONLY the JSON structure. No other text."""
         available = [t for t in trains if t.get("availability") == "Available"]
         best = (available or trains)[0] if trains else {}
         price = best.get("price_inr", 0)
+        alts = [t for t in trains if t != best]
         return {
             "recommended": best,
-            "alternatives" : trains[1:3],
+            "alternatives" : alts,
             "best_class": cls,
             "class_note": f"{cls} class recommended for this journey",
             "total_cost": price,

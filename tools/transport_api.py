@@ -2,7 +2,7 @@ import os
 import sys
 import random
 import requests
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from dotenv import load_dotenv
  
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -31,6 +31,7 @@ class TrainOption:
     price_inr:     int    # total for all passengers
     availability:  str    # "Available" | "Waitlist" | "RAC"
     days_of_run:   str    # "Daily" | "Mon,Wed,Fri" etc.
+    class_prices:  dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -213,6 +214,7 @@ def _mock_trains(
  
     valid_class = travel_class if travel_class in prices else "3A"
     price_pp    = prices[valid_class]
+    class_prices = {k: v * passengers for k, v in prices.items()}
  
     options = []
     for t in trains:
@@ -229,6 +231,7 @@ def _mock_trains(
             price_inr    = price_pp * passengers,
             availability = random.choice(_AVAILABILITY),
             days_of_run  = random.choice(_DAYS_OF_RUN),
+            class_prices = class_prices,
         ))
  
     return options
@@ -428,12 +431,15 @@ def _irctc_search(
                         price_pp    = prices.get(cls, price_pp)
                         break
  
-            # Format duration: "18:25" → "18h 25m"
             try:
                 dur_parts = duration_raw.split(":")
                 dur_str   = f"{dur_parts[0]}h {int(dur_parts[1]):02d}m"
             except Exception:
                 dur_str = duration_raw
+
+            c_prices = {k: prices[k] * passengers for k in classes_avail if k in prices}
+            if not c_prices:
+                c_prices = {k: v * passengers for k, v in prices.items()}
  
             options.append(TrainOption(
                 train_name   = train_name,
@@ -448,6 +454,7 @@ def _irctc_search(
                 price_inr    = price_pp * passengers,
                 availability = "Check irctc.co.in",   # real availability needs separate call
                 days_of_run  = _parse_run_days(run_on),
+                class_prices = c_prices,
             ))
         except Exception:
             continue

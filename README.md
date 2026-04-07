@@ -6,8 +6,11 @@ An AI-powered travel planning system that uses multiple specialist agents to cre
 
 ✨ **Multi-Agent System**
 - **FlightAgent**: Finds best flights within budget
+- **TrainAgent**: Finds optimal train routes and schedules
+- **BusAgent**: Provides bus transportation options
 - **HotelAgent**: Recommends accommodations by area and price
 - **ItineraryAgent**: Creates day-by-day activity plans
+- **JourneyAgent**: Generates seamless multi-modal routing and day-by-day transport
 - **BudgetAgent**: Tracks costs and manages spending
 - **ContextAgent**: Provides weather, safety, and packing tips
 
@@ -25,12 +28,15 @@ An AI-powered travel planning system that uses multiple specialist agents to cre
 
 🗺️ **Smart Routing**
 - Flight API integration (AviationStack)
+- Comprehensive Transport API for Train and Bus routing
 - Hotel booking API (Booking.com via RapidAPI)
+- Multi-modal transport plans including day-by-day transit
 - Real destination data
 - Travel time calculations
 
 🔄 **Plan Iterations**
 - Create initial plan from text
+- Select preferred transport mode (Flight, Train, Bus) *after* generation
 - Modify existing plans
 - Compare multiple versions
 - Export as formatted text
@@ -89,10 +95,10 @@ Detailed daily activities and schedule:
 
 ![Itinerary](./screenshot/Screenshot%202026-04-03%20110405.png)
 
-### 6. Flight & Hotel Recommendations
+### 6. Flexible Transport & Hotel Recommendations
 Smart recommendations for transportation and accommodation:
-- Recommended flights with details
-- Flight duration and amenities
+- **Post-Generation Choice**: Flexibly choose between Train, Flight, and Bus options *after* the initial plan is generated.
+- Recommended flights, trains, and buses with duration and amenities
 - Recommended hotels with ratings
 - Room prices and total cost
 - Amenities and facilities
@@ -201,8 +207,8 @@ Interests: beach,food    • Kerala family 7d
 | Tab | Shows |
 |---|---|
 | ✈️ Flights & Hotel | Recommended flight + hotel with alternatives |
-| � Transport | Train & bus options + recommendations |
-| �📍 Itinerary | Day-by-day expandable schedule with meals |
+| 🚌 Transport | Train & bus options + recommendations |
+| 📍 Itinerary | Day-by-day expandable schedule with meals |
 | 💰 Budget | Progress bars per category + money tips |
 | 🌦️ Context | Weather, food, safety, etiquette, packing |
 | 💬 Chat | Full conversation history + plan comparison |
@@ -344,13 +350,17 @@ D:\travel-ai\
 ├── agents/
 │   ├── planner.py         Part 5 ✅
 │   ├── fllight_agent.py   Part 4 ✅
+│   ├── train_agent.py     Part 4 ✅
+│   ├── bus_agent.py       Part 4 ✅
 │   ├── hotel_agent.py     Part 4 ✅
 │   ├── itinerary_agent.py Part 4 ✅
+│   ├── journey_agent.py   Part 4 ✅
 │   ├── budget_agent.py    Part 4 ✅
 │   └── context_agent.py   Part 4 ✅
 │
 ├── tools/
 │   ├── flight_api.py      Part 3 ✅
+│   ├── transport_api.py   Part 3 ✅
 │   ├── hotel_api.py       Part 3 ✅
 │   └── weather_api.py     Part 3 ✅
 │

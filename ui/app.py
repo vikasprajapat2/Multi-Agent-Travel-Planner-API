@@ -424,12 +424,18 @@ _{hotel.get('recommendation_reason','')}_
             if rec_t:
                 avail = rec_t.get("availability","Unknown")
                 avail_color = "green" if avail == "Available" else "orange"
+                class_prices = rec_t.get('class_prices', {})
+                if class_prices:
+                    prices_str = " | ".join([f"{k} ({fmt_inr(v)})" for k, v in class_prices.items()])
+                else:
+                    prices_str = f"**{trains_data.get('best_class','')}**"
+                
                 st.markdown(f"""
 **{rec_t.get('train_name','')}** ({rec_t.get('train_number','')})
 - 🕐 {rec_t.get('depart_time','')} → {rec_t.get('arrive_time','')} ({rec_t.get('duration','')})
-- 🎟️ Class: **{trains_data.get('best_class','')}** | {rec_t.get('distance_km','')} km
+- 🎟️ Classes: {prices_str} | {rec_t.get('distance_km','')} km
 - 📅 Runs: {rec_t.get('days_of_run','')}
-- 💰 **{fmt_inr(trains_data.get('total_cost',0))}** for {plan.get('passengers',2)} passengers
+- 💰 **{fmt_inr(trains_data.get('total_cost',0))}** target budget for {plan.get('passengers',2)} passengers
 - :{avail_color}[{avail}]
 
 _{trains_data.get('class_note','')}_
@@ -441,11 +447,17 @@ _{trains_data.get('class_note','')}_
                 if alts_t:
                     with st.expander("View alternative trains"):
                         for t in alts_t:
+                            alt_class_prices = t.get('class_prices', {})
+                            if alt_class_prices:
+                                alt_prices_str = " | ".join([f"{k} ({fmt_inr(v)})" for k,v in alt_class_prices.items()])
+                            else:
+                                alt_prices_str = f"{t.get('travel_class','')} | {fmt_inr(t.get('price_inr',0))}"
+                            
                             st.markdown(
                                 f"**{t.get('train_name','')}** {t.get('train_number','')} | "
                                 f"{t.get('depart_time','')[-5:]} → {t.get('arrive_time','')[-5:]} | "
-                                f"{t.get('travel_class','')} | {fmt_inr(t.get('price_inr',0))} | "
-                                f"{t.get('availability','')}"
+                                f"{t.get('availability','')}\n\n"
+                                f"  🎟️ {alt_prices_str}"
                             )
             else:
                 st.info("No direct trains found for this route.")

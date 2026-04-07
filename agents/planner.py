@@ -128,7 +128,7 @@ class PlannerAgent:
         print(f"        → {days_count} days generated")
         
         print(f"  [7/8] JourneyAgent (every leg + sightseeing)...")
-        journey = self.journey_agent.run(request, flights, hotel, itinerary)
+        journey = self.journey_agent.run(request, flights, hotel, itinerary, trains, buses)
         legs_count = len(journey.get('legs', []))
         print(f"        → {legs_count} journey legs planned")
 

@@ -239,6 +239,8 @@ class JourneyAgent:
         flights: dict,
         hotel: dict,
         itinerary: dict,
+        trains: dict = None,
+        buses: dict = None,
     ) -> dict:
 
         origin_key  = request.origin.lower().split(",")[0].strip()
@@ -249,6 +251,8 @@ class JourneyAgent:
         local_transport= _LOCAL_TRANSPORT.get(dest_key, _LOCAL_TRANSPORT["default"])
 
         rec_flight   = flights.get("recommended") or {}
+        rec_train    = (trains or {}).get("recommended") or {}
+        rec_bus      = (buses or {}).get("recommended") or {}
         hotel_name   = (hotel.get("recommended") or {}).get("name", "Hotel")
         hotel_area   = (hotel.get("recommended") or {}).get("area", dest_key)
 
@@ -286,9 +290,11 @@ LEG 1 — HOME TO ORIGIN AIRPORT:
   Airport        : {origin_airport['airport_name']}
   Known options  : {json.dumps(origin_airport['transport_options'], indent=2)}
  
-LEG 2 — MAIN JOURNEY:
-  Mode      : {'Flight' if rec_flight else 'Train/Bus'}
-  Details   : {rec_flight.get('airline','')}{rec_flight.get('flight_number','')} | {rec_flight.get('depart_time','')} → {rec_flight.get('arrive_time','')}
+LEG 2 — MAIN JOURNEY (TRANSPORT OPTIONS):
+  Flight    : {rec_flight.get('airline','')}{rec_flight.get('flight_number','')} | {rec_flight.get('depart_time','')} → {rec_flight.get('arrive_time','')}
+  Train     : {rec_train.get('train_name','')} | {rec_train.get('departure_time','')} → {rec_train.get('arrival_time','')}
+  Bus       : {rec_bus.get('operator','')} | {rec_bus.get('departure_time','')} → {rec_bus.get('arrival_time','')}
+  Instruction: Display Flight, Train, and Bus as choices for this leg so the user can select their preferred mode after generation.
  
 LEG 3 — DESTINATION AIRPORT/STATION TO HOTEL:
   Destination    : {request.destination}
