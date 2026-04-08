@@ -45,15 +45,18 @@ def chat_json(
         max_tokens: int = 2048,
 ) -> dict:
 
-    raw = chat(
-        prompt = prompt,
-        system = system,
-        model = model,
-        max_tokens = max_tokens, 
-        temperature = 0.1,
-    )
+    try:
+        raw = chat(
+            prompt = prompt,
+            system = system,
+            model = model,
+            max_tokens = max_tokens, 
+            temperature = 0.1,
+        )
+    except Exception as e:
+        return {"_parse_error": True, "raw": str(e)}
 
-    cleaned = re.sub(r"'''json\s*|'''\s*", "" , raw).strip()
+    cleaned = re.sub(r"```json\s*|'''json\s*|```\s*|'''\s*", "" , raw).strip()
     try:
         return json.loads(cleaned)
     except json.JSONDecodeError:
@@ -88,9 +91,12 @@ def orchestrator_json(
         max_tokens: int = 1024,
 ) -> dict:
 
-    raw = orchestrator_chat(prompt=prompt, system= system, max_tokens= max_tokens)
+    try:
+        raw = orchestrator_chat(prompt=prompt, system= system, max_tokens= max_tokens)
+    except Exception as e:
+        return {"_parse_error": True, "raw": str(e)}
 
-    cleaned = re.sub(r"```json\s*|```\s*","", raw).strip()
+    cleaned = re.sub(r"```json\s*|'''json\s*|```\s*|'''\s*","", raw).strip()
 
     try:
         return json.loads(cleaned)

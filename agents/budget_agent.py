@@ -115,7 +115,7 @@ Return ONLY the JSON structure. No other text."""
         result = chat_json(prompt=prompt, system=SYSTEM_PROMPT, max_tokens=900)
  
         if result.get("_parse_error"):
-            print(f"  [{self.name}] JSON parse issue — using calculated fallback")
+            print(f"  [{self.name}] JSON parse issue - using calculated fallback")
             return self._calculated_fallback(
                 request, flight_cost, hotel_cost,
                 food_est, activity_est, transport_est, misc_est,

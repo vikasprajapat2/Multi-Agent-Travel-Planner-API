@@ -1,0 +1,17 @@
+=======================================================
+  planner.py — FULL END-TO-END TEST
+  This runs all 5 agents + Gemini calls
+  Estimated time: 20-40 seconds
+=======================================================
+
+  Session ID: 5d961696...
+
+--------------------------------------------------
+Traceback (most recent call last):
+  File "D:\travel-ai\agents\planner.py", line 340, in <module>
+    print("  TEST 1: Natural language \u2192 full plan")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 27: character maps to <undefined>

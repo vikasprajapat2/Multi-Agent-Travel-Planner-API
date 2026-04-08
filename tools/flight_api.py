@@ -121,8 +121,14 @@ def _mock_search(
     if key:
         info = _ROUTES[key]
         airlines, (pmin, pmax), duration = info["airlines"], info["base"], info["dur"]
+        is_fallback = False
     else:
-        airlines, pmin, pmax, duration = ["Air India", "IndiGo", "Emirates"], 8000, 35000, "5h 00m"
+        route_hash = hash(origin.upper() + destination.upper())
+        fallback_h = (route_hash % 6) + 3 # 3 to 8 hours
+        fallback_m = (route_hash % 4) * 15 # varies
+        duration = f"{fallback_h}h {fallback_m:02d}m"
+        airlines, pmin, pmax = ["Air India", "IndiGo", "Vistara"], 5000, 15000
+        is_fallback = True
 
     random.seed(hash(date + origin.upper() + destination.upper()) % 9999)
     flights = []
@@ -146,7 +152,7 @@ def _mock_search(
             depart_time   = f"{date} {dep_hour:02d}:{dep_min:02d}",
             arrive_time   = f"{date} {arr_hour:02d}:{arr_min:02d}",
             duration      = duration,
-            stops         = 0 if price_pp > (pmin+pmax)//2 else random.choice([0,1]),
+            stops         = 1 if is_fallback else (0 if price_pp > (pmin+pmax)//2 else random.choice([0,1])),
             price_inr     = price_pp * passengers,
             cabin         = "Economy",
             baggage       = "15 kg check-in included",

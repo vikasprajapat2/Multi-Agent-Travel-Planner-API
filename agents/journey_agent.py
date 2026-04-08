@@ -321,7 +321,7 @@ Return ONLY the JSON structure. Be specific with real place names and costs."""
         result = chat_json(prompt=prompt, system=SYSTEM_PROMPT, max_tokens=3000)
  
         if result.get("_parse_error"):
-            print(f"  [{self.name}] JSON parse issue — using structured fallback")
+            print(f"  [{self.name}] JSON parse issue - using structured fallback")
             return self._fallback(request, origin_airport, dest_airport,
                                   local_transport, days)
  
